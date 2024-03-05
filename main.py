@@ -7,13 +7,21 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    conns = []
+    try:
+        conns = get_conns()
+    except:
+        pass
+    return render_template('index.html', conns=conns)
 
 
 @app.route('/get_conns', methods=['POST'])
 def get_conns():
     sess = vici.Session()
-    sess.list_conns()
+    conns_found = []
+    for conn in sess.list_conns():
+        conns_found.append(conn)
+    return conns_found
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
