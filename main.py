@@ -13,8 +13,12 @@ app.config['SECRET_KEY'] = 'secretkey'
 @app.route('/')
 def index():
     conns = []
-    conns = get_conns()
-    return render_template('index.html', conns=None, fail="vici_fail")
+    try:
+        conns = get_conns()
+        return render_template('index.html', conns=None, fail="vici_fail")
+    except:
+        return render_template('index.html', conns=None, fail="vici_fail")
+    return render_template('index.html', conns=conns, fail="no")
 
 
 @app.route('/create_encyrpt/<idx>')
@@ -29,6 +33,7 @@ def connection_form():
     else:
         return render_template("create_connection.html", form=form)
 
+@app.route('/home')
 def get_conns():
     sckt = socket.socket(socket.AF_UNIX)
     sckt.connect("/var/run/charon.vici")
@@ -36,7 +41,7 @@ def get_conns():
     conn_params = {
         'conn': "testcase",
         'local_addrs': "23.423.233.23",
-        'remote_addrs': "233.32.23",
+        'remote_addrs': "233.32.23.87",
         'local': {
             'auth': 'psk',
             'id': 'your_local_id',
@@ -56,7 +61,10 @@ def get_conns():
         'ike': {
             'proposal': 'aes256gcm16-prfsha512-ecp384!',
             'lifetime': '1h',
-            'encap': 'no'
+            'encap': 'no',
+            'auth_method': 'psk',
+            'remote_auth': "dfdffd",
+            'local_auth': "dfdfds"
         },
         'mark': 42,
         'keyingtries': 0,
