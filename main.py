@@ -13,11 +13,8 @@ app.config['SECRET_KEY'] = 'secretkey'
 @app.route('/')
 def index():
     conns = []
-    try:
-        conns = get_conns()
-    except:
-        return render_template('index.html', conns=None, fail="vici_fail")
-    return render_template('index.html', conns=conns, fail="no")
+    conns = get_conns()
+    return render_template('index.html', conns=None, fail="vici_fail")
 
 
 @app.route('/create_encyrpt/<idx>')
@@ -33,7 +30,6 @@ def connection_form():
         return render_template("create_connection.html", form=form)
 
 def get_conns():
-    create_vpn_connection("testcase","23.423.233.23","233.32.23","PSK")
     sckt = socket.socket(socket.AF_UNIX)
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
