@@ -99,10 +99,9 @@ def get_conns1():
     saconn["remote"] = remote
     remote["auth"] = "psk"
     remote["id"] = "103.169.19.131"
-    children = []
-    saconn["children"] = children
     net2x = OrderedDict
-    children[0] = net2x
+    children = [net2x]
+    saconn["children"] = children
     net2x["local_ts"] = "192.168.42.0/24"
     net2x["remote_ts"] = "10.44.124.0/24"
     net2x["mode"] = "tunnel"
