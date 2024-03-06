@@ -76,7 +76,8 @@ def get_conns():
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
-    return conns_found
+    # return conns_found
+    return render_template('index.html', conns=conns_found, fail="no")
 @app.route('/home1')
 def get_conns1():
     sckt = socket.socket(socket.AF_UNIX)
@@ -120,7 +121,8 @@ def get_conns1():
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
-    return conns_found
+    # return conns_found
+    return render_template('index.html', conns=conns_found, fail="no")
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
