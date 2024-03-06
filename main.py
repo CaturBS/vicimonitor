@@ -84,17 +84,9 @@ def get_conns1():
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
     conn_params = {
-        'conn': "testcase",
-        'local_addrs': "23.423.233.23",
-        'remote_addrs': "233.32.23.87",
-        'local': {
-            'auth': 'psk',
-            'id': 'your_local_id',
-        },
-        'remote': {
-            'auth': 'psk',
-            'id': 'your_remote_id'
-        },
+        'conn': "testconn",
+        'local_addrs': ["221.12.12.24"],
+        'remote_addrs': ["34.23.23.2"],
         'children': [{
             'name': 'child',
             'local_ts': '0.0.0.0/0',
@@ -108,8 +100,8 @@ def get_conns1():
             'lifetime': '1h',
             'encap': 'no',
             'auth_method': 'psk',
-            'remote_auth': "dfdffd",
-            'local_auth': "dfdfds"
+            'remote_auth': "shared_secret",
+            'local_auth': "shared_secret"
         },
         'mark': 42,
         'keyingtries': 0,
