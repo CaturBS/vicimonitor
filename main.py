@@ -38,6 +38,50 @@ def get_conns():
     sckt = socket.socket(socket.AF_UNIX)
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
+    # conn_params = {
+    #     'conn': "testcase",
+    #     'local_addrs': "23.423.233.23",
+    #     'remote_addrs': "233.32.23.87",
+    #     'local': {
+    #         'auth': 'psk',
+    #         'id': 'your_local_id',
+    #     },
+    #     'remote': {
+    #         'auth': 'psk',
+    #         'id': 'your_remote_id'
+    #     },
+    #     'children': [{
+    #         'name': 'child',
+    #         'local_ts': '0.0.0.0/0',
+    #         'remote_ts': '0.0.0.0/0',
+    #         'start_action': 'start',
+    #         'close_action': 'none',
+    #         'esp_proposals': 'aes256gcm16-modp2048!'
+    #     }],
+    #     'ike': {
+    #         'proposal': 'aes256gcm16-prfsha512-ecp384!',
+    #         'lifetime': '1h',
+    #         'encap': 'no',
+    #         'auth_method': 'psk',
+    #         'remote_auth': "dfdffd",
+    #         'local_auth': "dfdfds"
+    #     },
+    #     'mark': 42,
+    #     'keyingtries': 0,
+    #     'reauth_time': 0
+    # }
+    #
+    # # Load the connection configuration
+    # sess.load_conn(conn_params)
+    conns_found = []
+    for conn in sess.list_conns():
+        conns_found.append(conn)
+    return conns_found
+@app.route('/home1')
+def get_conns1():
+    sckt = socket.socket(socket.AF_UNIX)
+    sckt.connect("/var/run/charon.vici")
+    sess = vici.Session(sckt)
     conn_params = {
         'conn': "testcase",
         'local_addrs': "23.423.233.23",
@@ -81,4 +125,4 @@ def get_conns():
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
     Session(app)
-    app.run("0.0.0.0", 5000)
+    app.run("0.0.0.0", 5001)
