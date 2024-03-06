@@ -1,0 +1,12 @@
+
+<form method="post" action="/" enctype="multipart/form-data" id="{{ form.idx }}">
+
+        <p>{{ form.encryption.label }} {{ form.encryption() }}</p>
+        <p>{{ form.integrity.label }} {{ form.integrity() }}</p>
+        <p>{{ form.dh_group.label }} {{ form.dh_group() }}</p>
+
+        <p><input type="submit" value="Submit"></p>
+</form>
+<script>
+
+</script>

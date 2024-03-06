@@ -3,6 +3,7 @@ from flask import Flask, session, request, render_template
 from flask_session import Session
 from flask_wtf import FlaskForm
 from connection_form import ConnectionForm
+from form.choose_encryption_form import ChooseEncryptionForm
 import socket
 
 app = Flask(__name__)
@@ -19,16 +20,21 @@ def index():
     return render_template('index.html', conns=conns, fail="no")
 
 
+@app.route('/create_encyrpt/<idx>')
+def create_encyrpt_form(idx):
+    form = ChooseEncryptionForm(str(idx))
+    return render_template("choose_encryption.html", form=form)
 @app.route('/create_connection')
 def connection_form():
     form = ConnectionForm()
     if request.method == 'POST' and form.validate():
-        form.get_dh_group_list()
+        form.name
     else:
         return render_template("create_connection.html", form=form)
 
 @app.route('/get_conns', methods=['POST'])
 def get_conns():
+    create_vpn_connection("testcase","23.423.233.23","233.32.23","PSK")
     sckt = socket.socket(socket.AF_UNIX)
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
@@ -37,6 +43,41 @@ def get_conns():
         conns_found.append(conn)
     return conns_found
 
+def create_vpn_connection(connection_name, local_ip, remote_ip, shared_secret):
+    with vici.Session() as session:
+        # Define the connection parameters
+        conn_params = {
+            'conn': connection_name,
+            'local_addrs': [local_ip],
+            'remote_addrs': [remote_ip],
+            'local': {
+                'auth': 'psk',
+                'id': 'your_local_id',
+            },
+            'remote': {
+                'auth': 'psk',
+                'id': 'your_remote_id'
+            },
+            'children': [{
+                'name': 'child',
+                'local_ts': '0.0.0.0/0',
+                'remote_ts': '0.0.0.0/0',
+                'start_action': 'start',
+                'close_action': 'none',
+                'esp_proposals': 'aes256gcm16-modp2048!'
+            }],
+            'ike': {
+                'proposal': 'aes256gcm16-prfsha512-ecp384!',
+                'lifetime': '1h',
+                'encap': 'no'
+            },
+            'mark': 42,
+            'keyingtries': 0,
+            'reauth_time': 0
+        }
+
+        # Load the connection configuration
+        session.load_conn(conn_params)
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
