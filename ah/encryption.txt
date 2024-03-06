@@ -1,0 +1,41 @@
+null
+aes128 or aes
+aes192
+aes256
+aes128ctr
+aes192ctr
+aes256ctr
+aes128ccm8 or aes128ccm64
+aes192ccm8 or aes192ccm64
+aes256ccm8 or aes256ccm64
+aes128ccm12 or aes128ccm96
+aes192ccm12 or aes192ccm96
+aes256ccm12 or aes256ccm96
+aes128ccm16 or aes128ccm128
+aes192ccm16 or aes192ccm128
+aes256ccm16 or aes256ccm128
+aes128gcm8 or aes128gcm64
+aes192gcm8 or aes192gcm64
+aes256gcm8 or aes256gcm64
+aes128gcm12 or aes128gcm96
+aes192gcm12 or aes192gcm96
+aes256gcm12 or aes256gcm96
+aes128gcm16 or aes128gcm128
+aes192gcm16 or aes192gcm128
+aes256gcm16 or aes256gcm128
+aes128gmac
+aes192gmac
+aes256gmac
+3des
+blowfish128 or blowfish
+blowfish192
+blowfish256
+camellia128 or camellia
+camellia192
+camellia256
+serpent128 or serpent
+serpent192
+serpent256
+twofish128 or twofish
+twofish192
+twofish256

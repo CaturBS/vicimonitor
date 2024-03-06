@@ -1,0 +1,10 @@
+none
+md5
+sha1 or sha
+sha256 or sha2_256
+sha384 or sha2_384
+sha512 or sha2_512
+aesxcbc
+aes128gmac
+aes192gmac
+aes256gmac

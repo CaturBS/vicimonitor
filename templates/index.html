@@ -21,11 +21,17 @@
 <body>
     <div class="container">
         <div class="row"><h1>Connections</h1></div>
-        {% for conn in conns: %}
-        <div class="row">
-            <div class="col-4">{{ conn }}</div>
-        </div>
-	    {% endfor %}
+        {% if fail == "no": %}
+            {% for conn in conns: %}
+            <div class="row">
+                <div class="col-4">{{ conn }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col-8">Can not connect to vici plugin, please enable it</div>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

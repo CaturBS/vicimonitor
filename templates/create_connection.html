@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Form</title>
+</head>
+<body>
+    <h1>Create Site To Site IKEV1 Connection</h1>
+    <form method="post" action="/" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <p>{{ form.name.label }} {{ form.name() }}</p>
+        <p>{{ form.aggressive.label }} {{ form.aggressive() }}</p>
+        <p>{{ form.authby.label }} {{ form.authby() }}</p>
+        <p>{{ form.auto.label }} {{ form.auto() }}</p>
+        <p>{{ form.closeaction.label }} {{ form.closeaction() }}</p>
+        <p>{{ form.compress.label }} {{ form.compress() }}</p>
+        <p>{{ form.dpdaction.label }} {{ form.dpdaction() }}</p>
+        <p>{{ form.dpddelay.label }} {{ form.dpddelay() }}</p>
+        <p>{{ form.dpdtimeout.label }} {{ form.dpdtimeout() }}</p>
+        <p>{{ form.inactivity.label }} {{ form.inactivity() }}</p>
+        <p>{{ form.esp_encryption.label }} {{ form.esp_encryption() }}</p>
+        <p>{{ form.esp_integrity.label }} {{ form.esp_integrity() }}</p>
+        <p>{{ form.esp_dh_group.label }} {{ form.esp_dh_group() }}</p>
+        <p>{{ form.forceencaps.label }} {{ form.forceencaps() }}</p>
+        <p>{{ form.fragmentation.label }} {{ form.fragmentation() }}</p>
+        <p>{{ form.ike_encryption.label }} {{ form.ike_encryption() }}</p>
+        <p>{{ form.ike_integrity.label }} {{ form.ike_integrity() }}</p>
+        <p>{{ form.ike_dh_group.label }} {{ form.ike_dh_group() }}</p>
+        <p>{{ form.ikedscp.label }} {{ form.ikedscp() }}</p>
+        <p>{{ form.ikelifetime.label }} {{ form.ikelifetime() }}</p>
+        <p>{{ form.installpolicy.label }} {{ form.installpolicy() }}</p>
+        <p>{{ form.keyexchange.label }} {{ form.keyexchange() }}</p>
+        <p>{{ form.keyingtries.label }} {{ form.keyingtries() }}</p>
+        <p>{{ form.lifetime.label }} {{ form.lifetime() }}</p>
+        <p>{{ form.marginbytes.label }} {{ form.marginbytes() }}</p>
+        <p>{{ form.marginpackets.label }} {{ form.marginpackets() }}</p>
+        <p>{{ form.margintime.label }} {{ form.margintime() }}</p>
+        <p>{{ form.mark.label }} {{ form.mark() }}</p>
+        <p>{{ form.mark_in.label }} {{ form.mark_in() }}</p>
+        <p>{{ form.mark_out.label }} {{ form.mark_out() }}</p>
+        <p>{{ form.modeconfig.label }} {{ form.modeconfig() }}</p>
+        <p>{{ form.reauth.label }} {{ form.reauth() }}</p>
+        <p>{{ form.rekey.label }} {{ form.rekey() }}</p>
+        <p>{{ form.rekeyfuzz.label }} {{ form.rekeyfuzz() }}</p>
+        <p>{{ form.replay_window.label }} {{ form.replay_window() }}</p>
+        <p>{{ form.reqid.label }} {{ form.reqid() }}</p>
+        <p>{{ form.sha256_96.label }} {{ form.sha256_96() }}</p>
+        <p>{{ form.tfc.label }} {{ form.tfc() }}</p>
+        <p>{{ form.type.label }} {{ form.type() }}</p>
+
+        <h3>left|right End Parameters</h3>
+        <p>{{ form.left.label }} {{ form.left() }}</p>
+        <p>{{ form.right.label }} {{ form.right() }}</p>
+        <p>{{ form.leftallowany.label }} {{ form.leftallowany() }}</p>
+        <p>{{ form.rightallowany.label }} {{ form.rightallowany() }}</p>
+        <p>{{ form.leftfirewall.label }} {{ form.leftfirewall() }}</p>
+        <p>{{ form.rightfirewall.label }} {{ form.rightfirewall() }}</p>
+        <p>{{ form.leftgroups.label }} {{ form.leftgroups() }}</p>
+        <p>{{ form.rightgroups.label }} {{ form.rightgroups() }}</p>
+        <p>{{ form.lefthostaccess.label }} {{ form.lefthostaccess() }}</p>
+        <p>{{ form.righthostaccess.label }} {{ form.righthostaccess() }}</p>
+lefthostaccess |righthostaccess = yes | no
+
+
+
+
+
+
+
+
+        <p><input type="submit" value="Submit"></p>
+    </form>
+</body>
+</html>
