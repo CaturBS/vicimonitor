@@ -84,29 +84,36 @@ def get_conns1():
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
 
-    sa = OrderedDict()
-    saconn = OrderedDict()
-    sa["test"] = saconn
-    saconn["local_addrs"] = "86.38.218.46"
-    saconn["remote_addrs"] = "103.169.19.131"
-    saconn["version"] = "1"
-    saconn["proposals"] = "aes256-sha256-modp2048"
-    local = OrderedDict()
-    saconn["local"] = local
-    local["auth"] = "psk"
-    local["id"] = "86.38.218.46"
-    remote = OrderedDict()
-    saconn["remote"] = remote
-    remote["auth"] = "psk"
-    remote["id"] = "103.169.19.131"
-    net2x = OrderedDict
-    children = [net2x]
-    saconn["children"] = children
-    net2x["local_ts"] = "192.168.42.0/24"
-    net2x["remote_ts"] = "10.44.124.0/24"
-    net2x["mode"] = "tunnel"
+    connection = {
+        'test_vpn': {
+            'local_addrs': ['86.38.218.46'],
+            'remote_addrs': ['103.169.19.131'],
+            'version': 1,
+            'proposals': ['aes256-sha256-modp2048'],
+            'rekey_time': 86400,
+            'fragmentation': 'yes',
+            'local': {
+                'auth': 'psk',
+                'id': '86.38.218.46'
+            },
+            'remote': {
+                'auth': 'psk',
+                'id': '103.169.19.131'
+            },
+            'children': {
+                'testchild': {
+                'local_ts': '192.168.42.0/24',
+                'remote_ts': '10.44.124.0/24',
+                'mode': 'tunnel',
+                'rekey_time': '3600',
+                'esp_proposals': 'aes256-sha256',
+                'start_action': 'start'
+                }
+            }
+        }
+    }
     # Load the connection configuration
-    sess.load_conn(sa)
+    sess.load_conn(connection)
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
