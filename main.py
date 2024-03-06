@@ -83,6 +83,12 @@ def get_conns1():
     sckt = socket.socket(socket.AF_UNIX)
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
+    ike_proposal = {
+        'name': 'ike_proposal',
+        'encryption': 'aes256gcm16',
+        'prf': 'sha512',
+        'dh_group': 'ecp384'
+    }
     conn_params = {
         'conn': "testconn",
         'local_addrs': ["221.12.12.24"],
@@ -96,7 +102,7 @@ def get_conns1():
             'esp_proposals': 'aes256gcm16-modp2048!'
         }],
         'ike': {
-            'proposal': 'aes256gcm16-prfsha512-ecp384!',
+            'proposal': 'ike_proposal',
             'lifetime': '1h',
             'encap': 'no',
             'auth_method': 'psk',
@@ -108,6 +114,8 @@ def get_conns1():
         'reauth_time': 0
     }
 
+    # Load the IKE proposal
+    session.load_proposal(ike_proposal)
     # Load the connection configuration
     sess.load_conn(conn_params)
     conns_found = []
