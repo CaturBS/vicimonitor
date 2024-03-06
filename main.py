@@ -102,7 +102,7 @@ def get_conns1():
     children = []
     saconn["children"] = children
     net2x = OrderedDict
-    children["children"] = net2x
+    children[0] = net2x
     net2x["local_ts"] = "192.168.42.0/24"
     net2x["remote_ts"] = "10.44.124.0/24"
     net2x["mode"] = "tunnel"
