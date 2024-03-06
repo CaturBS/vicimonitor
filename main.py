@@ -91,11 +91,11 @@ def get_conns1():
     saconn["remote_addrs"] = "103.169.19.131"
     saconn["version"] = "1"
     saconn["proposals"] = "aes256-sha256-modp2048"
-    local = OrderedDict
+    local = OrderedDict()
     saconn["local"] = local
     local["auth"] = "psk"
     local["id"] = "86.38.218.46"
-    remote = OrderedDict
+    remote = OrderedDict()
     saconn["remote"] = remote
     remote["auth"] = "psk"
     remote["id"] = "103.169.19.131"
