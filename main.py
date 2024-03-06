@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from connection_form import ConnectionForm
 from form.choose_encryption_form import ChooseEncryptionForm
 import socket
-
+from collections import OrderedDict
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 
@@ -83,41 +83,31 @@ def get_conns1():
     sckt = socket.socket(socket.AF_UNIX)
     sckt.connect("/var/run/charon.vici")
     sess = vici.Session(sckt)
-    ike_proposal = {
-        'name': 'ike_proposal',
-        'encryption': 'aes256gcm16',
-        'prf': 'sha512',
-        'dh_group': 'ecp384'
-    }
-    conn_params = {
-        'conn': "testconn",
-        'local_addrs': ["221.12.12.24"],
-        'remote_addrs': ["34.23.23.2"],
-        'children': [{
-            'name': 'child',
-            'local_ts': '0.0.0.0/0',
-            'remote_ts': '0.0.0.0/0',
-            'start_action': 'start',
-            'close_action': 'none',
-            'esp_proposals': 'aes256gcm16-modp2048!'
-        }],
-        'ike': {
-            'proposal': 'ike_proposal',
-            'lifetime': '1h',
-            'encap': 'no',
-            'auth_method': 'psk',
-            'remote_auth': "shared_secret",
-            'local_auth': "shared_secret"
-        },
-        'mark': 42,
-        'keyingtries': 0,
-        'reauth_time': 0
-    }
 
-    # Load the IKE proposal
-    session.load_proposal(ike_proposal)
+    sa = OrderedDict()
+    saconn = OrderedDict()
+    sa["test"] = saconn
+    saconn["local_addrs"] = "86.38.218.46"
+    saconn["remote_addrs"] = "103.169.19.131"
+    saconn["version"] = "1"
+    saconn["proposals"] = "aes256-sha256-modp2048"
+    local = OrderedDict
+    saconn["local"] = local
+    local["auth"] = "psk"
+    local["id"] = "86.38.218.46"
+    remote = OrderedDict
+    saconn["remote"] = remote
+    remote["auth"] = "psk"
+    remote["id"] = "103.169.19.131"
+    children = []
+    saconn["children"] = children
+    net2x = OrderedDict
+    children["children"] = net2x
+    net2x["local_ts"] = "192.168.42.0/24"
+    net2x["remote_ts"] = "10.44.124.0/24"
+    net2x["mode"] = "tunnel"
     # Load the connection configuration
-    sess.load_conn(conn_params)
+    sess.load_conn(sa)
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
