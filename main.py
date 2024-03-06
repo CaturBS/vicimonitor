@@ -102,12 +102,12 @@ def get_conns1():
             },
             'children': {
                 'testchild': {
-                'local_ts': '192.168.42.0/24',
-                'remote_ts': '10.44.124.0/24',
-                'mode': 'tunnel',
-                'rekey_time': '3600',
-                'esp_proposals': 'aes256-sha256',
-                'start_action': 'start'
+                    'local_ts': '192.168.42.0/24',
+                    'remote_ts': '10.44.124.0/24',
+                    'mode': 'tunnel',
+                    'rekey_time': '3600',
+                    'esp_proposals': 'aes256-sha256',
+                    'start_action': 'start'
                 }
             }
         }
