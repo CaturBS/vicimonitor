@@ -1,6 +1,6 @@
 import vici
 from flask import Flask, session, request, render_template
-from flask_session import Session
+# from flask_session import Session
 from flask_wtf import FlaskForm
 from connection_form import ConnectionForm
 from form.choose_encryption_form import ChooseEncryptionForm
@@ -93,5 +93,5 @@ def get_conns1():
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
-    Session(app)
+    # Session(app)
     app.run("0.0.0.0", 5001)
