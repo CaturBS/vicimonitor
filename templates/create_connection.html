@@ -34,7 +34,7 @@
                         }
                     }
                     $("#espProgress").remove();
-                    $("#esp").val(text);
+                    $("#esp_proposals").val(text);
                   });
                 });
                 // Handle the form data
@@ -51,7 +51,44 @@
             <form method="post" action="/" enctype="multipart/form-data">
                 {{ form.csrf_token }}
                 <p>{{ form.name.label }} {{ form.name() }}</p>
+                <p>{{ form.local_addrs.label }} {{ form.local_addrs() }}</p>
+                <p>{{ form.remote_addrs.label }} {{ form.remote_addrs() }}</p>
+                <p>{{ form.local_port.label }} {{ form.local_port() }}</p>
+                <p>{{ form.remote_port.label }} {{ form.remote_port() }}</p>
+                <p>{{ form.proposals.label }} {{ form.proposals() }}
+                <button id="createIkeButton">Choose IKE</button>
+                </p>
+                <p>{{ form.vips.label }} {{ form.vips() }}</p>
                 <p>{{ form.aggressive.label }} {{ form.aggressive() }}</p>
+                <p>{{ form.pull.label }} {{ form.pull() }}</p>
+                <p>{{ form.dscp.label }} {{ form.dscp() }}</p>
+                <p>{{ form.encap.label }} {{ form.encap() }}</p>
+                <p>{{ form.dpd_delay.label }} {{ form.dpd_delay() }}</p>
+                <p>{{ form.dpd_timeout.label }} {{ form.dpd_timeout() }}</p>
+                <p>{{ form.fragmentation.label }} {{ form.fragmentation() }}</p>
+                <p>{{ form.keyingtries.label }} {{ form.keyingtries() }}</p>
+                <p>{{ form.unique.label }} {{ form.unique() }}</p>
+                <p>{{ form.reauth_time.label }} {{ form.reauth_time() }}</p>
+                <p>{{ form.rekey_time.label }} {{ form.rekey_time() }}</p>
+                <p>{{ form.over_time.label }} {{ form.over_time() }}</p>
+
+                <h3>Local Auth</h3>
+                <p>{{ form.local_round.label }} {{ form.local_round() }}</p>
+                <p>{{ form.local_auth.label }} {{ form.local_auth() }}</p>
+                <p>{{ form.local_id.label }} {{ form.local_id() }}</p>
+
+                <h3>Remote Auth</h3>
+                <p>{{ form.remote_round.label }} {{ form.remote_round() }}</p>
+                <p>{{ form.remote_auth.label }} {{ form.remote_auth() }}</p>
+                <p>{{ form.remote_id.label }} {{ form.remote_id() }}</p>
+
+                <h3>Children</h3>
+                <p>{{ form.esp_proposals.label }} {{ form.esp_proposals() }}
+                <button id="createEspButton">Choose ESP</button>
+                </p>
+
+
+
                 <p>{{ form.authby.label }} {{ form.authby() }}</p>
                 <p>{{ form.auto.label }} {{ form.auto() }}</p>
                 <p>{{ form.closeaction.label }} {{ form.closeaction() }}</p>
@@ -60,19 +97,13 @@
                 <p>{{ form.dpddelay.label }} {{ form.dpddelay() }}</p>
                 <p>{{ form.dpdtimeout.label }} {{ form.dpdtimeout() }}</p>
                 <p>{{ form.inactivity.label }} {{ form.inactivity() }}</p>
-                <p>{{ form.esp.label }} {{ form.esp() }}
-                <button id="createEspButton">Choose ESP</button>
-                </p>
                 <p>{{ form.forceencaps.label }} {{ form.forceencaps() }}</p>
-                <p>{{ form.fragmentation.label }} {{ form.fragmentation() }}</p>
                 <p>{{ form.ike_encryption.label }} {{ form.ike_encryption() }}</p>
                 <p>{{ form.ike_integrity.label }} {{ form.ike_integrity() }}</p>
                 <p>{{ form.ike_dh_group.label }} {{ form.ike_dh_group() }}</p>
-                <p>{{ form.ikedscp.label }} {{ form.ikedscp() }}</p>
                 <p>{{ form.ikelifetime.label }} {{ form.ikelifetime() }}</p>
                 <p>{{ form.installpolicy.label }} {{ form.installpolicy() }}</p>
                 <p>{{ form.keyexchange.label }} {{ form.keyexchange() }}</p>
-                <p>{{ form.keyingtries.label }} {{ form.keyingtries() }}</p>
                 <p>{{ form.lifetime.label }} {{ form.lifetime() }}</p>
                 <p>{{ form.marginbytes.label }} {{ form.marginbytes() }}</p>
                 <p>{{ form.marginpackets.label }} {{ form.marginpackets() }}</p>

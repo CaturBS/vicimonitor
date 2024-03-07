@@ -2,11 +2,10 @@ import os
 
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField
-from wtforms.validators import DataRequired, InputRequired
+from wtforms.validators import InputRequired, IPAddress, Optional, Regexp
 
 
 class ConnectionForm(FlaskForm):
-
 
     @staticmethod
     def get_dh_group_list() -> list:
@@ -38,8 +37,50 @@ class ConnectionForm(FlaskForm):
                 lines.append(line)
         return lines
 
-    name = StringField('connection_name', name="name", validators=[InputRequired()])
-    aggressive = SelectField(label='aggressive', name='aggressive', choices=["no", "yes"])
+    name = StringField('Connection Name', name="name", validators=[InputRequired()])
+    local_addrs = StringField('Local Addresses', name="local_addrs", validators=[InputRequired(), IPAddress()])
+    remote_addrs = StringField('Remote Addresses', name="remote_addrs")
+    version = SelectField(label='IKE Version', name='version', choices=["1"])
+    local_port = StringField('Local Port', name="local_port",
+                             validators=[Optional(), Regexp(r'^\d{1,5}$', message="Invalid port number")])
+    remote_port = StringField('Local Port', name="remote_port",
+                              validators=[Optional(), Regexp(r'^\d{1,5}$', message="Invalid port number")])
+    proposals = StringField('Proposals (IKE)', name="proposals", validators=[InputRequired()])
+    vips = StringField('Vips', name="vips", validators=[Optional(), IPAddress()])
+    aggressive = SelectField(label='Aggressive', name='aggressive', choices=["no", "yes"])
+    pull = SelectField(label='Pull', name='pull', choices=["yes", "no"])
+    dscp = StringField('DSCP', name="local_port",
+                       validators=[Optional(), Regexp(r'^\d{6}$', message="Invalid DSCP format, should 6 digit")])
+    encap = SelectField(label='Encap', name='encap', choices=["no", "yes"])
+    dpd_delay = StringField('Dpd Delay(default 0s)', name="dpd_delay", validators=[Optional(), Regexp(r'^\d+[smh]')])
+    dpd_timeout = StringField('Dpd Timeout(default 0s)', name="dpd_timeout",
+                              validators=[Optional(), Regexp(r'^\d+[smh]')])
+    fragmentation = SelectField(label='fragmentation', name='fragmentation', choices=["yes", "accept", "force", "no"])
+    keyingtries = StringField('keyingtries (default 1)', name="keyingtries",
+                              validators=[Optional(), Regexp(r'^\d+$', message="Should be integer")])
+    unique = SelectField(label='unique', name='unique', choices=["no", "never", "replace", "keep"])
+    reauth_time = StringField('reauth_time (default 0s)', name="reauth_time",
+                              validators=[Optional(), Regexp(r'^\d+[smh]')])
+    rekey_time = StringField('rekey_time (default 0s)', name="rekey_time",
+                             validators=[Optional(), Regexp(r'^\d+[smh]')])
+    over_time = StringField('over_time (default 0s)', name="over_time",
+                            validators=[Optional(), Regexp(r'^\d+[smh]')])
+
+    # local auth
+    local_round = StringField('round', name="local_round",
+                        validators=[Optional(), Regexp(r'^\d+$', message="should be number")])
+    local_auth = SelectField(label='auth', name='local_auth', choices=["psk"])
+    local_id = StringField('ID', name="local_id",
+                            validators=[Optional()])
+
+    remote_round = StringField('round', name="remote_round",
+                        validators=[Optional(), Regexp(r'^\d+$', message="should be number")])
+    remote_auth = SelectField(label='auth', name='remote_auth', choices=["psk"])
+    remote_id = StringField('ID', name="remote_id",
+                            validators=[Optional()])
+    esp_proposals = StringField('esp_proposals', name="esp_proposals")
+
+    # Check needed
     authby = SelectField(label='Auth By', name='authby', choices=["secret"])
     auto = SelectField(label='auto', name='auto', choices=["ignore", "add", "route", "start"])
 
@@ -49,19 +90,15 @@ class ConnectionForm(FlaskForm):
     dpddelay = StringField('dpddelay', name="dpddelay")
     dpdtimeout = StringField('dpdtimeout', name="dpdtimeout")
     inactivity = StringField('inactivity', name="inactivity")
-    esp = StringField('esp', name="esp")
     forceencaps = SelectField(label='forceencaps', name='forceencaps', choices=["no", "yes"])
-    fragmentation = SelectField(label='fragmentation', name='fragmentation', choices=["yeas", "accept", "force", "no"])
 
     ike_encryption = SelectField('IKE Encryption', name='ike_encryption', choices=get_encryption_list())
     ike_integrity = SelectField('IKE Integrity', name='ike_integrity', choices=get_integrity_list())
     ike_dh_group = SelectField('IKE DH Group', name='ike_dh_group', choices=get_dh_group_list())
 
-    ikedscp = StringField('ikedscp', name="ikedscp")
     ikelifetime = StringField('ikelifetime', name="ikelifetime")
     installpolicy = SelectField(label='installpolicy', name='installpolicy', choices=["yes", "no"])
     keyexchange = SelectField(label='keyexchange', name='keyexchange', choices=["ikev1"])
-    keyingtries = StringField('keyingtries', name="keyingtries")
 
     lifetime = StringField('lifetime', name="lifetime")
 

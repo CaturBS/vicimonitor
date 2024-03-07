@@ -4,21 +4,31 @@ from flask_session import Session
 from flask_wtf import FlaskForm
 from connection_form import ConnectionForm
 from form.choose_encryption_form import ChooseEncryptionForm
+import json
 import socket
 from collections import OrderedDict
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 
 
+class ViciSess:
+    vicisession = None
+    @staticmethod
+    def get_sesssion():
+        if ViciSess.vicisession is None:
+            ViciSess.vicisession = vici.Session()
+        return ViciSess.vicisession
+    
 @app.route('/')
 def index():
-    conns = []
     try:
-        conns = get_conns()
-        return render_template('index.html', conns=None, fail="vici_fail")
+        sess = ViciSess.get_sesssion()
+        conns_found = []
+        for conn in sess.list_conns():
+            conns_found.append(conn)
+        return render_template('index.html', conns=conns_found, fail="no")
     except:
         return render_template('index.html', conns=None, fail="vici_fail")
-    return render_template('index.html', conns=conns, fail="no")
 
 
 @app.route('/create_encyrpt/<idx>')
@@ -35,59 +45,20 @@ def connection_form():
 
 @app.route('/home')
 def get_conns():
-    sckt = socket.socket(socket.AF_UNIX)
-    sckt.connect("/var/run/charon.vici")
-    sess = vici.Session(sckt)
-    # conn_params = {
-    #     'conn': "testcase",
-    #     'local_addrs': "23.423.233.23",
-    #     'remote_addrs': "233.32.23.87",
-    #     'local': {
-    #         'auth': 'psk',
-    #         'id': 'your_local_id',
-    #     },
-    #     'remote': {
-    #         'auth': 'psk',
-    #         'id': 'your_remote_id'
-    #     },
-    #     'children': [{
-    #         'name': 'child',
-    #         'local_ts': '0.0.0.0/0',
-    #         'remote_ts': '0.0.0.0/0',
-    #         'start_action': 'start',
-    #         'close_action': 'none',
-    #         'esp_proposals': 'aes256gcm16-modp2048!'
-    #     }],
-    #     'ike': {
-    #         'proposal': 'aes256gcm16-prfsha512-ecp384!',
-    #         'lifetime': '1h',
-    #         'encap': 'no',
-    #         'auth_method': 'psk',
-    #         'remote_auth': "dfdffd",
-    #         'local_auth': "dfdfds"
-    #     },
-    #     'mark': 42,
-    #     'keyingtries': 0,
-    #     'reauth_time': 0
-    # }
-    #
-    # # Load the connection configuration
-    # sess.load_conn(conn_params)
+    sess = ViciSess.get_sesssion()
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
     # return conns_found
     return render_template('index.html', conns=conns_found, fail="no")
-@app.route('/home1')
-def get_conns1():
-    sckt = socket.socket(socket.AF_UNIX)
-    sckt.connect("/var/run/charon.vici")
-    sess = vici.Session(sckt)
 
-    connection = {
+def get_conns1():
+    sess = ViciSess.get_sesssion()
+
+    conn_params = {
         'test_vpn': {
-            'local_addrs': ['86.38.218.46'],
-            'remote_addrs': ['103.169.19.131'],
+            'local_addrs': ['88.2.3.1'],
+            'remote_addrs': ['23.32.2.3'],
             'version': 1,
             'proposals': ['aes256-sha256-modp2048'],
             'rekey_time': 86400,
@@ -102,18 +73,18 @@ def get_conns1():
             },
             'children': {
                 'testchild': {
-                    'local_ts': '192.168.42.0/24',
-                    'remote_ts': '10.44.124.0/24',
+                    'local_ts': ['192.168.42.0/24'],
+                    'remote_ts': ['10.144.124.0/24'],
                     'mode': 'tunnel',
                     'rekey_time': '3600',
-                    'esp_proposals': 'aes256-sha256',
+                    'esp_proposals': ['aes256-sha256'],
                     'start_action': 'start'
                 }
             }
         }
     }
     # Load the connection configuration
-    sess.load_conn(connection)
+    sess.load_conn(conn_params)
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
