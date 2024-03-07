@@ -15,8 +15,8 @@ class ViciSess:
     vicisession = None
     @staticmethod
     def get_sesssion():
-        if ViciSess.vicisession is None:
-            ViciSess.vicisession = vici.Session()
+        # if ViciSess.vicisession is None:
+        ViciSess.vicisession = vici.Session()
         return ViciSess.vicisession
     
 @app.route('/')
