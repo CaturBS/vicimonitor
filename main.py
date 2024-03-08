@@ -83,7 +83,7 @@ def connection_form():
         if bool(form.local_id.data):
             local_params['id'] = form.local_id.data
         else:
-            local_params['id'] = form.local_addrs
+            local_params['id'] = form.local_addrs.data
 
         # remote
         remote_params = OrderedDict()
@@ -95,7 +95,7 @@ def connection_form():
         if bool(form.remote_id.data):
             remote_params['id'] = form.remote_id.data
         else:
-            remote_params['id'] = form.remote_id
+            remote_params['id'] = form.remote_id.data
 
         # children
         children_params = OrderedDict()
