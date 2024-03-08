@@ -134,7 +134,7 @@ def connection_form():
         if bool(form.child_label.data):
             the_child_param['label'] = form.child_label.data
         if bool(form.label_mode.data):
-            the_child_param['label_mode'] = form.label_mode.data
+            the_child_param['mode'] = form.label_mode.data
         if bool(form.tfc_padding.data):
             the_child_param['tfc_padding'] = form.tfc_padding.data
         if bool(form.replay_window.data):
