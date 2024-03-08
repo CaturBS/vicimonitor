@@ -1,44 +1,82 @@
 {% extends 'layout.html' %}
 {% block head %}
 <script>
+        function setButtonInputEncrypt(btnId,modalId,modalBodyId,createFormId,progressId,inputid){
+            document.getElementById(btnId).addEventListener('click',
+                function(event){
+                    event.preventDefault();
+                    var myModalEl = document.querySelector('#'+modalId);
+                    var modal = bootstrap.Modal.getOrCreateInstance(myModalEl); // Returns a Bootstrap modal instance
+                    modal.show();
 
-        $(document).ready(function () {
-        document.getElementById('createEspButton').addEventListener('click',
-            function(event) {
-                event.preventDefault();
-                var myModalEl = document.querySelector('#espmodal');
-                var modal = bootstrap.Modal.getOrCreateInstance(myModalEl); // Returns a Bootstrap modal instance
-                modal.show();
-
-
-                $.ajax({
-                  url: "{{ 'create_encyrpt/espForm' }}",
-                  context: document.body
-                }).done(function(data) {
-                  $( '#espmodalBody' ).html(data);
-                  $('#espForm').submit(function(e){
-                    e.preventDefault();
-                    serialized = $(this).serializeArray();
-                    var data = {};
-                    for(s in serialized){
-                        data[serialized[s]['name']] = serialized[s]['value']
-                    }
-                    text = "";
-                    if (data.encryption.trim() != "null") {
-                        text += data.encryption.replace(/\s.*$/g,"").trim();
-                        if (data.integrity.trim() != "none") {
-                            text += "-" + data.integrity.replace(/\s.*$/g,"").trim();
-                            if (data.dh_group.trim() != "none") {
-                                text += "-" + data.dh_group.replace(/\s.*$/g,"").trim();
+                    $.ajax({
+                      url: "{{ 'create_encyrpt/' }}"+createFormId,
+                      context: document.body
+                    }).done(function(data) {
+                      $( '#'+modalBodyId ).html(data);
+                      $('#'+createFormId).submit(function(e){
+                        e.preventDefault();
+                        serialized = $(this).serializeArray();
+                        var data = {};
+                        for(s in serialized){
+                            data[serialized[s]['name']] = serialized[s]['value']
+                        }
+                        text = "";
+                        if (data.encryption.trim() != "null") {
+                            text += data.encryption.replace(/\s.*$/g,"").trim();
+                            if (data.integrity.trim() != "none") {
+                                text += "-" + data.integrity.replace(/\s.*$/g,"").trim();
+                                if (data.dh_group.trim() != "none") {
+                                    text += "-" + data.dh_group.replace(/\s.*$/g,"").trim();
+                                }
                             }
                         }
-                    }
-                    $("#espProgress").remove();
-                    $("#esp_proposals").val(text);
-                  });
-                });
-                // Handle the form data
-        });
+                        $("#"+progressId).remove();
+                        $("#"+inputid).val(text);
+                        modal.hide();
+                      });
+                    });
+                }
+            );
+        }
+        $(document).ready(function () {
+            setButtonInputEncrypt("createIkeButton","ikemodal","ikemodalBody","ikeForm","ikeProgress","proposals");
+            document.getElementById('createEspButton').addEventListener('click',
+                function(event) {
+                    event.preventDefault();
+                    var myModalEl = document.querySelector('#espmodal');
+                    var modal = bootstrap.Modal.getOrCreateInstance(myModalEl); // Returns a Bootstrap modal instance
+                    modal.show();
+
+                    $.ajax({
+                      url: "{{ 'create_encyrpt/espForm' }}",
+                      context: document.body
+                    }).done(function(data) {
+                      $( '#espmodalBody' ).html(data);
+                      $('#espForm').submit(function(e){
+                        e.preventDefault();
+                        serialized = $(this).serializeArray();
+                        var data = {};
+                        for(s in serialized){
+                            data[serialized[s]['name']] = serialized[s]['value']
+                        }
+                        text = "";
+                        if (data.encryption.trim() != "null") {
+                            text += data.encryption.replace(/\s.*$/g,"").trim();
+                            if (data.integrity.trim() != "none") {
+                                text += "-" + data.integrity.replace(/\s.*$/g,"").trim();
+                                if (data.dh_group.trim() != "none") {
+                                    text += "-" + data.dh_group.replace(/\s.*$/g,"").trim();
+                                }
+                            }
+                        }
+                        $("#espProgress").remove();
+                        $("#esp_proposals").val(text);
+                        modal.hide();
+                      });
+                    });
+                    // Handle the form data
+            });
         });
 </script>
 {% endblock %}
@@ -56,7 +94,7 @@
                 <p>{{ form.local_port.label }} {{ form.local_port() }}</p>
                 <p>{{ form.remote_port.label }} {{ form.remote_port() }}</p>
                 <p>{{ form.proposals.label }} {{ form.proposals() }}
-                <button id="createIkeButton">Choose IKE</button>
+                <button id="createIkeButton">Choose Proposal (IKE)</button>
                 </p>
                 <p>{{ form.vips.label }} {{ form.vips() }}</p>
                 <p>{{ form.aggressive.label }} {{ form.aggressive() }}</p>
@@ -83,66 +121,64 @@
                 <p>{{ form.remote_id.label }} {{ form.remote_id() }}</p>
 
                 <h3>Children</h3>
+                <p>{{ form.children_name.label }} {{ form.children_name() }}</p>
                 <p>{{ form.esp_proposals.label }} {{ form.esp_proposals() }}
                 <button id="createEspButton">Choose ESP</button>
                 </p>
 
-
-
-                <p>{{ form.authby.label }} {{ form.authby() }}</p>
-                <p>{{ form.auto.label }} {{ form.auto() }}</p>
-                <p>{{ form.closeaction.label }} {{ form.closeaction() }}</p>
-                <p>{{ form.compress.label }} {{ form.compress() }}</p>
-                <p>{{ form.dpdaction.label }} {{ form.dpdaction() }}</p>
-                <p>{{ form.dpddelay.label }} {{ form.dpddelay() }}</p>
-                <p>{{ form.dpdtimeout.label }} {{ form.dpdtimeout() }}</p>
-                <p>{{ form.inactivity.label }} {{ form.inactivity() }}</p>
-                <p>{{ form.forceencaps.label }} {{ form.forceencaps() }}</p>
-                <p>{{ form.ike_encryption.label }} {{ form.ike_encryption() }}</p>
-                <p>{{ form.ike_integrity.label }} {{ form.ike_integrity() }}</p>
-                <p>{{ form.ike_dh_group.label }} {{ form.ike_dh_group() }}</p>
-                <p>{{ form.ikelifetime.label }} {{ form.ikelifetime() }}</p>
-                <p>{{ form.installpolicy.label }} {{ form.installpolicy() }}</p>
-                <p>{{ form.keyexchange.label }} {{ form.keyexchange() }}</p>
-                <p>{{ form.lifetime.label }} {{ form.lifetime() }}</p>
-                <p>{{ form.marginbytes.label }} {{ form.marginbytes() }}</p>
-                <p>{{ form.marginpackets.label }} {{ form.marginpackets() }}</p>
-                <p>{{ form.margintime.label }} {{ form.margintime() }}</p>
-                <p>{{ form.mark.label }} {{ form.mark() }}</p>
-                <p>{{ form.mark_in.label }} {{ form.mark_in() }}</p>
-                <p>{{ form.mark_out.label }} {{ form.mark_out() }}</p>
-                <p>{{ form.modeconfig.label }} {{ form.modeconfig() }}</p>
-                <p>{{ form.reauth.label }} {{ form.reauth() }}</p>
-                <p>{{ form.rekey.label }} {{ form.rekey() }}</p>
-                <p>{{ form.rekeyfuzz.label }} {{ form.rekeyfuzz() }}</p>
-                <p>{{ form.replay_window.label }} {{ form.replay_window() }}</p>
-                <p>{{ form.reqid.label }} {{ form.reqid() }}</p>
                 <p>{{ form.sha256_96.label }} {{ form.sha256_96() }}</p>
-                <p>{{ form.tfc.label }} {{ form.tfc() }}</p>
-                <p>{{ form.type.label }} {{ form.type() }}</p>
-
-                <h3>left|right End Parameters</h3>
-                <p>{{ form.left.label }} {{ form.left() }}</p>
-                <p>{{ form.right.label }} {{ form.right() }}</p>
-                <p>{{ form.leftallowany.label }} {{ form.leftallowany() }}</p>
-                <p>{{ form.rightallowany.label }} {{ form.rightallowany() }}</p>
-                <p>{{ form.leftfirewall.label }} {{ form.leftfirewall() }}</p>
-                <p>{{ form.rightfirewall.label }} {{ form.rightfirewall() }}</p>
-                <p>{{ form.leftgroups.label }} {{ form.leftgroups() }}</p>
-                <p>{{ form.rightgroups.label }} {{ form.rightgroups() }}</p>
-                <p>{{ form.lefthostaccess.label }} {{ form.lefthostaccess() }}</p>
-                <p>{{ form.righthostaccess.label }} {{ form.righthostaccess() }}</p>
-                <p>{{ form.leftsourceip.label }} {{ form.leftsourceip() }}</p>
-                <p>{{ form.rightsourceip.label }} {{ form.rightsourceip() }}</p>
-                <p>{{ form.leftsubnet.label }} {{ form.leftsubnet() }}</p>
-                <p>{{ form.rightsubnet.label }} {{ form.rightsubnet() }}</p>
-                <p>{{ form.leftupdown.label }} {{ form.leftupdown() }}</p>
-                <p>{{ form.rightupdown.label }} {{ form.rightupdown() }}</p>
-
-
+                <p>{{ form.local_ts.label }} {{ form.local_ts() }}</p>
+                <p>{{ form.remote_ts.label }} {{ form.remote_ts() }}</p>
+                <p>{{ form.child_rekey_time.label }} {{ form.child_rekey_time() }}</p>
+                <p>{{ form.child_lifetime.label }} {{ form.child_lifetime() }}</p>
+                <p>{{ form.child_mode.label }} {{ form.child_mode() }}</p>
+                <p>{{ form.child_policies.label }} {{ form.child_policies() }}</p>
+                <p>{{ form.child_policies_fwd_out.label }} {{ form.child_policies_fwd_out() }}</p>
+                <p>{{ form.dpd_action.label }} {{ form.dpd_action() }}</p>
+                <p>{{ form.ipcomp.label }} {{ form.ipcomp() }}</p>
+                <p>{{ form.child_inactivity.label }} {{ form.child_inactivity() }}</p>
+                <p>{{ form.child_reqid.label }} {{ form.child_reqid() }}</p>
+                <p>{{ form.child_priority.label }} {{ form.child_priority() }}</p>
+                <p>{{ form.child_interface.label }} {{ form.child_interface() }}</p>
+                <p>{{ form.mark_in.label }} {{ form.mark_in() }}</p>
+                <p>{{ form.mark_in_sa.label }} {{ form.mark_in_sa() }}</p>
+                <p>{{ form.mark_out.label }} {{ form.mark_out() }}</p>
+                <p>{{ form.set_mark_in.label }} {{ form.set_mark_in() }}</p>
+                <p>{{ form.set_mark_out.label }} {{ form.set_mark_out() }}</p>
+                <p>{{ form.if_id_in.label }} {{ form.if_id_in() }}</p>
+                <p>{{ form.if_id_out.label }} {{ form.if_id_out() }}</p>
+                <p>{{ form.child_label.label }} {{ form.child_label() }}</p>
+                <p>{{ form.label_mode.label }} {{ form.label_mode() }}</p>
+                <p>{{ form.tfc_padding.label }} {{ form.tfc_padding() }}</p>
+                <p>{{ form.replay_window.label }} {{ form.replay_window() }}</p>
+                <p>{{ form.hw_offload.label }} {{ form.hw_offload() }}</p>
+                <p>{{ form.copy_df.label }} {{ form.copy_df() }}</p>
+                <p>{{ form.copy_ecn.label }} {{ form.copy_ecn() }}</p>
+                <p>{{ form.copy_dscp.label }} {{ form.copy_dscp() }}</p>
+                <p>{{ form.start_action.label }} {{ form.start_action() }}</p>
+                <p>{{ form.close_action.label }} {{ form.close_action() }}</p>
                 <p><input type="submit" value="Submit"></p>
             </form>
         </div>
+    </div>
+
+    <div class="modal" id="ikemodal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Choose ESP</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="ikemodalBody" >
+
+            <div class="progress" id="ikeProgress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="modal" id="espmodal" tabindex="-1" role="dialog">

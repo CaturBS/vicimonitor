@@ -73,69 +73,51 @@ class ConnectionForm(FlaskForm):
     local_id = StringField('ID', name="local_id",
                             validators=[Optional()])
 
+    # remote auth
     remote_round = StringField('round', name="remote_round",
                         validators=[Optional(), Regexp(r'^\d+$', message="should be number")])
     remote_auth = SelectField(label='auth', name='remote_auth', choices=["psk"])
     remote_id = StringField('ID', name="remote_id",
                             validators=[Optional()])
+
+
+    # children
+    children_name = StringField('children_name', name="children_name", validators=[InputRequired()])
     esp_proposals = StringField('esp_proposals', name="esp_proposals")
-
-    # Check needed
-    authby = SelectField(label='Auth By', name='authby', choices=["secret"])
-    auto = SelectField(label='auto', name='auto', choices=["ignore", "add", "route", "start"])
-
-    closeaction = SelectField(label='Close Action', name='closeaction', choices=["none", "clear", "hold", "restart"])
-    compress = SelectField(label='compress', name='compress', choices=["no", "yes"])
-    dpdaction = SelectField(label='dpdaction', name='dpdaction', choices=["none", "clear", "hold", "restart"])
-    dpddelay = StringField('dpddelay', name="dpddelay")
-    dpdtimeout = StringField('dpdtimeout', name="dpdtimeout")
-    inactivity = StringField('inactivity', name="inactivity")
-    forceencaps = SelectField(label='forceencaps', name='forceencaps', choices=["no", "yes"])
-
-    ike_encryption = SelectField('IKE Encryption', name='ike_encryption', choices=get_encryption_list())
-    ike_integrity = SelectField('IKE Integrity', name='ike_integrity', choices=get_integrity_list())
-    ike_dh_group = SelectField('IKE DH Group', name='ike_dh_group', choices=get_dh_group_list())
-
-    ikelifetime = StringField('ikelifetime', name="ikelifetime")
-    installpolicy = SelectField(label='installpolicy', name='installpolicy', choices=["yes", "no"])
-    keyexchange = SelectField(label='keyexchange', name='keyexchange', choices=["ikev1"])
-
-    lifetime = StringField('lifetime', name="lifetime")
-
-    marginbytes = StringField('marginbytes', name="marginbytes")
-    marginpackets = StringField('marginpackets', name="marginpackets")
-
-    margintime = StringField('margintime', name="margintime")
-
-    mark = StringField('mark', name="mark")
-    mark_in = StringField('mark_in', name="mark_in")
-    mark_out = StringField('mark_out', name="mark_out")
-
-    modeconfig = SelectField(label='modeconfig', name='modeconfig', choices=["pull", "push"])
-    reauth = SelectField(label='reauth', name='reauth', choices=["yes", "no"])
-    rekey = SelectField(label='rekey', name='rekey', choices=["yes", "no"])
-    rekeyfuzz = StringField('rekeyfuzz', name="rekeyfuzz")
-    replay_window = StringField('replay_window', name="replay_window")
-    reqid = StringField('reqid', name="reqid")
     sha256_96 = SelectField(label='sha256_96', name='sha256_96', choices=["no", "yes"])
-    tfc = StringField('tfc', name="tfc")
-    type = SelectField(label='sha256_96', name='sha256_96',
-                       choices=["tunnel", "transport", "transport_proxy", "passthrough", "drop"])
+    local_ts = StringField('local_ts', name="local_ts", validators=[InputRequired()])
+    remote_ts = StringField('remote_ts', name="remote_ts", validators=[InputRequired()])
 
-    left = StringField('left', name="left")
-    right = StringField('right', name="right")
+    child_rekey_time = StringField('rekey_time (for child, default 1h)', name="child_rekey_time",
+                             validators=[Optional(), Regexp(r'^\d+[smh]')])
 
-    leftallowany = SelectField(label='leftallowany', name='leftallowany', choices=["no", "yes"])
-    rightallowany = SelectField(label='rightallowany', name='rightallowany', choices=["no", "yes"])
-    leftfirewall = SelectField(label='leftfirewall', name='leftfirewall', choices=["no", "yes"])
-    rightfirewall = SelectField(label='rightfirewall', name='rightfirewall', choices=["no", "yes"])
-    leftgroups = SelectField(label='leftgroups', name='leftgroups', choices=["no", "yes"])
-    rightgroups = SelectField(label='rightgroups', name='rightgroups', choices=["no", "yes"])
-    lefthostaccess = SelectField(label='lefthostaccess', name='lefthostaccess', choices=["no", "yes"])
-    righthostaccess = SelectField(label='righthostaccess', name='righthostaccess', choices=["no", "yes"])
-    leftsourceip = StringField('leftsourceip', name="leftsourceip")
-    rightsourceip = StringField('rightsourceip', name="rightsourceip")
-    leftsubnet = StringField('leftsubnet', name="leftsubnet")
-    rightsubnet = StringField('rightsubnet', name="rightsubnet")
-    leftupdown = StringField('leftupdown', name="leftupdown")
-    rightupdown = StringField('rightupdown', name="rightupdown")
+    child_lifetime = StringField('lifetime', name="child_lifetime")
+
+    child_mode = SelectField(label='mode', name='child_mode', choices=["tunnel", "transport", " transport_proxy"," beet"," pass"," drop"])
+    child_policies = SelectField(label='policie', name='child_policies', choices=["yes","no"])
+    child_policies_fwd_out = SelectField(label='policies_fwd_out', name='child_policies_fwd_out', choices=["no","yes"])
+    dpd_action = SelectField(label='dpd_action', name='dpd_action', choices=["clear", "trap"])
+    ipcomp = SelectField(label='ipcomp', name='ipcomp', choices=["no", "yes"])
+    child_inactivity = StringField('inactivity (default 0s)', name="child_inactivity", validators=[Optional(), Regexp(r'^\d+[smh]$')])
+    child_reqid = StringField('reqid (default 0)', name="child_reqid", validators=[Optional(), Regexp(r'^\d+$')])
+    child_priority = StringField('priority (default 0)', name="child_priority", validators=[Optional(), Regexp(r'^\d+$')])
+    child_interface = StringField('interface', name="child_interface", validators=[Optional()])
+    mark_in = StringField('mark_in', name="mark_in", validators=[Optional()])
+    mark_in_sa = SelectField(label='mark_in_sa', name='mark_in_sa', choices=["no", "yes"])
+    mark_out = StringField('mark_out', name="mark_out", validators=[Optional()])
+    set_mark_in = StringField('set_mark_in', name="set_mark_in", validators=[Optional()])
+    set_mark_out = StringField('set_mark_out', name="set_mark_out", validators=[Optional()])
+    if_id_in = StringField('if_id_in', name="if_id_in", validators=[Optional()])
+    if_id_out = StringField('if_id_out', name="if_id_out", validators=[Optional()])
+    child_label = StringField('label', name="child_label", validators=[Optional()])
+    label_mode = SelectField(label='mark_in_sa', name='mark_in_sa', choices=["system", "selinux", " simple"])
+    tfc_padding = StringField('tfc_padding (default 0)', name="tfc_padding", validators=[Optional(), Regexp(r'^\d+$')])
+    replay_window = StringField('replay_window (default 32)', name="replay_window", validators=[Optional(), Regexp(r'^\d+$')])
+    hw_offload = SelectField(label='hw_offload', name='hw_offload', choices=["no", "yes"])
+    copy_df = SelectField(label='copy_df', name='copy_df', choices=["yes", "no"])
+    copy_ecn = SelectField(label='copy_ecn', name='copy_ecn', choices=["yes", "no"])
+    copy_dscp = SelectField(label='copy_dscp', name='copy_dscp', choices=["out", "in", "yes", "no"])
+    start_action = SelectField(label='start_action', name='start_action', choices=["none", "trap", "start"])
+    close_action = SelectField(label='close_action', name='close_action', choices=["none", "trap", "start"])
+    # Check needed
+
