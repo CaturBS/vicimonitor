@@ -49,7 +49,7 @@ class ConnectionForm(FlaskForm):
     vips = StringField('Vips', name="vips", validators=[Optional(), IPAddress()])
     aggressive = SelectField(label='Aggressive', name='aggressive', choices=["no", "yes"])
     pull = SelectField(label='Pull', name='pull', choices=["yes", "no"])
-    dscp = StringField('DSCP', name="local_port",
+    dscp = StringField('DSCP', name="dscp",
                        validators=[Optional(), Regexp(r'^\d{6}$', message="Invalid DSCP format, should 6 digit")])
     encap = SelectField(label='Encap', name='encap', choices=["no", "yes"])
     dpd_delay = StringField('Dpd Delay(default 0s)', name="dpd_delay", validators=[Optional(), Regexp(r'^\d+[smh]')])
