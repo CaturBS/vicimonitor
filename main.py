@@ -51,7 +51,8 @@ def connection_form():
         the_conn['local_port'] = form.local_port.data
         the_conn['remote_port'] = form.remote_port.data
         the_conn['proposals'] = [form.proposals.data]
-        the_conn['vips'] = form.vips.data
+        if bool(form.vips.data):
+            the_conn['vips'] = form.vips.data
         the_conn['aggressive'] = form.aggressive.data
         the_conn['pull'] = form.pull.data
         if bool(form.dscp.data):
