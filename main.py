@@ -7,28 +7,28 @@ from form.choose_encryption_form import ChooseEncryptionForm
 import json
 import socket
 from collections import OrderedDict
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 
 
 class ViciSess:
     vicisession = None
+
     @staticmethod
     def get_sesssion():
         ViciSess.vicisession = vici.Session()
         return ViciSess.vicisession
-    
+
+
 @app.route('/')
 def index():
     try:
         sess = ViciSess.get_sesssion()
         conns_found = []
-        auth_found = []
-        for auth in sess.list_authorities():
-            auth_found.append(auth)
         for conn in sess.list_conns():
             conns_found.append(conn)
-        return render_template('index.html', conns=conns_found, auths=auth_found, fail="no")
+        return render_template('index.html', conns=conns_found, fail="no")
     except:
         return render_template('index.html', conns=None, fail="vici_fail")
 
@@ -39,14 +39,11 @@ def create_encyrpt_form(idx):
     return render_template("choose_encryption.html", form=form)
 
 
-
-@app.route('/create_connection', methods = ['POST','GET'])
+@app.route('/create_connection', methods=['POST', 'GET'])
 def connection_form():
     form = ConnectionForm()
 
     if request.method == 'POST' and form.validate():
-        new_auth_params = OrderedDict()
-
         new_conn_params = OrderedDict()
         the_conn = OrderedDict()
         new_conn_params[form.name.data] = the_conn
@@ -76,7 +73,7 @@ def connection_form():
         if bool(form.rekey_time.data):
             the_conn['rekey_time'] = form.rekey_time.data
 
-        #local
+        # local
         local_params = OrderedDict()
         the_conn['local'] = local_params
 
@@ -88,8 +85,7 @@ def connection_form():
         else:
             local_params['id'] = form.local_addrs
 
-        print('init form accept C (remote)')
-        #remote
+        # remote
         remote_params = OrderedDict()
         the_conn['remote'] = remote_params
         if bool(form.remote_round.data):
@@ -101,8 +97,7 @@ def connection_form():
         else:
             remote_params['id'] = form.remote_id
 
-
-        #children
+        # children
         children_params = OrderedDict()
         the_conn['children'] = children_params
 
@@ -158,15 +153,21 @@ def connection_form():
         print(new_conn_params)
         print(sess)
         sess.load_conn(new_conn_params)
-        sess.load_authority()
+
+        ike_loc = OrderedDict()
+        ike_loc['id'] = local_params['id']
+        ike_loc['data'] = form.local_secret
+        sess.load_shared(ike_loc)
+        ike_remote = OrderedDict()
+        ike_remote['id'] = remote_params['id']
+        ike_remote['data'] = form.remote_secret
+        sess.load_shared(ike_remote)
+
         conns_found = []
         for conn in sess.list_conns():
             conns_found.append(conn)
-        auth_found = []
-        for auth in sess.list_authorities():
-            auth_found.append(auth)
         # return conns_found
-        return render_template('index.html', conns=conns_found, auths=auth_found, fail="no")
+        return render_template('index.html', conns=conns_found, fail="no")
 
     elif request.method == 'POST':
         print(form.errors)
@@ -174,17 +175,16 @@ def connection_form():
     else:
         return render_template("create_connection.html", form=form)
 
+
 @app.route('/home')
 def get_conns():
     sess = ViciSess.get_sesssion()
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
-    auth_found = []
-    for auth in sess.list_authorities():
-        auth_found.append(auth)
     # return conns_found
-    return render_template('index.html', conns=conns_found, auths=auth_found, fail="no")
+    return render_template('index.html', conns=conns_found, fail="no")
+
 
 def get_conns1():
     sess = ViciSess.get_sesssion()
@@ -224,6 +224,7 @@ def get_conns1():
         conns_found.append(conn)
     # return conns_found
     return render_template('index.html', conns=conns_found, fail="no")
+
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
