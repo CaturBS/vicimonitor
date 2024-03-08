@@ -156,11 +156,13 @@ def connection_form():
 
         ike_loc = OrderedDict()
         ike_loc['id'] = local_params['id']
-        ike_loc['secret'] = form.local_secret
+        ike_loc['type'] = 'PSK'
+        ike_loc['data'] = form.local_secret
         sess.load_shared(ike_loc)
         ike_remote = OrderedDict()
         ike_remote['id'] = remote_params['id']
-        ike_remote['secret'] = form.remote_secret
+        ike_loc['type'] = 'PSK'
+        ike_remote['data'] = form.remote_secret
         sess.load_shared(ike_remote)
 
         conns_found = []
