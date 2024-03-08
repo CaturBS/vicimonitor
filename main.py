@@ -95,7 +95,7 @@ def connection_form():
         if bool(form.remote_id.data):
             remote_params['id'] = form.remote_id.data
         else:
-            remote_params['id'] = form.remote_id.data
+            remote_params['id'] = form.remote_addrs.data
 
         # children
         children_params = OrderedDict()
