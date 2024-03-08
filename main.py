@@ -34,7 +34,7 @@ def index():
 def create_encyrpt_form(idx):
     form = ChooseEncryptionForm(str(idx))
     return render_template("choose_encryption.html", form=form)
-@app.route('/create_connection')
+@app.route('/create_connection', methods = ['POST','GET'])
 def connection_form():
     form = ConnectionForm()
     if request.method == 'POST' and form.validate():
