@@ -86,7 +86,7 @@
             <h1>Create Site To Site IKEV1 Connection</h1>
         </div>
         <div class="row">
-            <form method="post" action="/" enctype="multipart/form-data">
+            <form method="post" action="/create_connection" enctype="multipart/form-data">
                 {{ form.csrf_token }}
                 <p>{{ form.name.label }} {{ form.name() }}</p>
                 <p>{{ form.local_addrs.label }} {{ form.local_addrs() }}</p>
