@@ -70,6 +70,7 @@ class ConnectionForm(FlaskForm):
     local_round = StringField('round', name="local_round",
                         validators=[Optional(), Regexp(r'^\d+$', message="should be number")])
     local_auth = SelectField(label='auth', name='local_auth', choices=["psk"])
+    local_secret = StringField('local_secret', name='local_secret');
     local_id = StringField('ID', name="local_id",
                             validators=[Optional()])
 
@@ -79,6 +80,7 @@ class ConnectionForm(FlaskForm):
     remote_auth = SelectField(label='auth', name='remote_auth', choices=["psk"])
     remote_id = StringField('ID', name="remote_id",
                             validators=[Optional()])
+    remote_secret = StringField('local_secret', name='remote_secret');
 
 
     # children
@@ -119,5 +121,6 @@ class ConnectionForm(FlaskForm):
     copy_dscp = SelectField(label='copy_dscp', name='copy_dscp', choices=["out", "in", "yes", "no"])
     start_action = SelectField(label='start_action', name='start_action', choices=["none", "trap", "start"])
     close_action = SelectField(label='close_action', name='close_action', choices=["none", "trap", "start"])
-    # Check needed
+
+    # Secret/auth
 

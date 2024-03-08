@@ -23,9 +23,12 @@ def index():
     try:
         sess = ViciSess.get_sesssion()
         conns_found = []
+        auth_found = []
+        for auth in sess.list_authorities():
+            auth_found.append(auth)
         for conn in sess.list_conns():
             conns_found.append(conn)
-        return render_template('index.html', conns=conns_found, fail="no")
+        return render_template('index.html', conns=conns_found, auths=auth_found, fail="no")
     except:
         return render_template('index.html', conns=None, fail="vici_fail")
 
@@ -42,6 +45,8 @@ def connection_form():
     form = ConnectionForm()
 
     if request.method == 'POST' and form.validate():
+        new_auth_params = OrderedDict()
+
         new_conn_params = OrderedDict()
         the_conn = OrderedDict()
         new_conn_params[form.name.data] = the_conn
@@ -78,7 +83,10 @@ def connection_form():
         if bool(form.local_round.data):
             local_params['round'] = form.local_round.data
         local_params['auth'] = form.local_auth.data
-        local_params['id'] = form.local_id.data
+        if bool(form.local_id.data):
+            local_params['id'] = form.local_id.data
+        else:
+            local_params['id'] = form.local_addrs
 
         print('init form accept C (remote)')
         #remote
@@ -88,6 +96,10 @@ def connection_form():
             remote_params['round'] = form.remote_round.data
         remote_params['auth'] = form.remote_auth.data
         remote_params['id'] = form.remote_id.data
+        if bool(form.remote_id.data):
+            remote_params['id'] = form.remote_id.data
+        else:
+            remote_params['id'] = form.remote_id
 
 
         #children
@@ -131,10 +143,6 @@ def connection_form():
             the_child_param['if_id_in'] = form.if_id_in.data
         if bool(form.if_id_out.data):
             the_child_param['if_id_out'] = form.if_id_out.data
-        # if bool(form.child_label.data):
-        #     the_child_param['label'] = form.child_label.data
-        # if bool(form.label_mode.data):
-        #     the_child_param['label_mode'] = form.label_mode.data
         if bool(form.tfc_padding.data):
             the_child_param['tfc_padding'] = form.tfc_padding.data
         if bool(form.replay_window.data):
@@ -146,16 +154,19 @@ def connection_form():
         the_child_param['start_action'] = form.start_action.data
         the_child_param['close_action'] = form.close_action.data
         sess = ViciSess.get_sesssion()
-
+        sess.load_shared()
         print(new_conn_params)
         print(sess)
         sess.load_conn(new_conn_params)
-
+        sess.load_authority()
         conns_found = []
         for conn in sess.list_conns():
             conns_found.append(conn)
+        auth_found = []
+        for auth in sess.list_authorities():
+            auth_found.append(auth)
         # return conns_found
-        return render_template('index.html', conns=conns_found, fail="no")
+        return render_template('index.html', conns=conns_found, auths=auth_found, fail="no")
 
     elif request.method == 'POST':
         print(form.errors)
@@ -169,8 +180,11 @@ def get_conns():
     conns_found = []
     for conn in sess.list_conns():
         conns_found.append(conn)
+    auth_found = []
+    for auth in sess.list_authorities():
+        auth_found.append(auth)
     # return conns_found
-    return render_template('index.html', conns=conns_found, fail="no")
+    return render_template('index.html', conns=conns_found, auths=auth_found, fail="no")
 
 def get_conns1():
     sess = ViciSess.get_sesssion()

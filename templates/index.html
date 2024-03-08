@@ -4,47 +4,51 @@
         <div class="row"><h1>List of Connections</h1></div>
         {% if fail == "no": %}
             <div class="row">
-                {% for conn in conns: %}
-                <td class="col-11">
-                        {% for connkey, connvalue in conn.items() %}
-                            <br/>
-                            <h2>{{connkey}}</h2>
-                            <table class="table table-striped">
-                            {% for key, value in connvalue.items() %}
-                                <tr>
-                                {% if value.__class__.__name__ == 'OrderedDict' %}
-                                    <td>{{key}}</td>
-                                    <td>
-                                        <table class="table">
-                                        {% for subkey, subvalue in value.items() %}
-                                            <tr>
-                                                <td>{{subkey}}</td>
-                                                <td>
-                                                {% if subvalue.__class__.__name__ == 'OrderedDict' %}
-                                                    <table class="table">
-                                                    {% for subsubkey, subsubvalue in subvalue.items() %}
-                                                        <tr>
-                                                            <td>{{subsubkey}}</td><td>{{subsubvalue}}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </table>
-                                                {% else %}
-                                                    {{subvalue}}
-                                                {% endif %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </table>
-                                    </td>
-                                {% else %}
-                                    <td>{{key}}</td><td>{{value}}</td>
-                                {% endif %}
-                                </tr>
-                            {% endfor %}
-                            </table>
-                        {% endfor %}
+                <div class="col-6">
+                {{auths}}
+
                 </div>
+                <div class="col-6">
+                {% for conn in conns: %}
+                    {% for connkey, connvalue in conn.items() %}
+                        <br/>
+                        <h2>{{connkey}}</h2>
+                        <table class="table table-striped">
+                        {% for key, value in connvalue.items() %}
+                            <tr>
+                            {% if value.__class__.__name__ == 'OrderedDict' %}
+                                <td>{{key}}</td>
+                                <td>
+                                    <table class="table">
+                                    {% for subkey, subvalue in value.items() %}
+                                        <tr>
+                                            <td>{{subkey}}</td>
+                                            <td>
+                                            {% if subvalue.__class__.__name__ == 'OrderedDict' %}
+                                                <table class="table">
+                                                {% for subsubkey, subsubvalue in subvalue.items() %}
+                                                    <tr>
+                                                        <td>{{subsubkey}}</td><td>{{subsubvalue}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </table>
+                                            {% else %}
+                                                {{subvalue}}
+                                            {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </table>
+                                </td>
+                            {% else %}
+                                <td>{{key}}</td><td>{{value}}</td>
+                            {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    {% endfor %}
                 {% endfor %}
+                </div>
             </div>
         {% else %}
             <div class="row">
