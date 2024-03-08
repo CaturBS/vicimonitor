@@ -45,7 +45,7 @@ def connection_form():
         new_conn_params = OrderedDict()
         the_conn = OrderedDict()
         new_conn_params[form.name] = the_conn
-        the_conn['version'] = int(form.version.gettext())
+        the_conn['version'] = form.version
         the_conn['local_addrs'] = form.local_addrs
         the_conn['remote_addrs'] = form.remote_addrs
         the_conn['local_port'] = form.local_port
@@ -54,28 +54,28 @@ def connection_form():
         the_conn['vips'] = form.vips
         the_conn['aggressive'] = form.aggressive
         the_conn['pull'] = form.pull
-        if bool(form.dscp and form.dscp.gettext().strip()):
+        if bool(form.dscp):
             the_conn['dscp'] = form.dscp
         the_conn['encap'] = form.encap
-        if bool(form.dpd_delay and form.dpd_delay.gettext().strip()):
+        if bool(form.dpd_delay):
             the_conn['dpd_delay'] = form.dpd_delay
-        if bool(form.dpd_timeout and form.dpd_timeout.gettext().strip()):
+        if bool(form.dpd_timeout):
             the_conn['dpd_timeout'] = form.dpd_timeout
         the_conn['fragmentation'] = form.fragmentation
-        if bool(form.keyingtries and form.keyingtries.gettext().strip()):
+        if bool(form.keyingtries):
             the_conn['keyingtries'] = form.keyingtries
         the_conn['unique'] = form.unique
-        if bool(form.reauth_time and form.reauth_time.gettext().strip()):
+        if bool(form.reauth_time):
             the_conn['reauth_time'] = form.reauth_time
-        if bool(form.rekey_time and form.rekey_time.gettext().strip()):
+        if bool(form.rekey_time):
             the_conn['rekey_time'] = form.rekey_time
 
         #local
         local_params = OrderedDict()
         the_conn['local'] = local_params
 
-        if bool(form.local_round and form.local_round.gettext().strip()):
-            local_params['local_round'] = int(form.gettext().local_round)
+        if bool(form.local_round):
+            local_params['local_round'] = form.local_round
         local_params['auth'] = form.local_auth
         local_params['id'] = form.local_id
 
@@ -83,13 +83,12 @@ def connection_form():
         #remote
         remote_params = OrderedDict()
         the_conn['remote'] = remote_params
-        if bool(form.remote_round and form.remote_round.gettext().strip()):
-            remote_params['remote_round'] = int(form.remote_round)
+        if bool(form.remote_round):
+            remote_params['remote_round'] = form.remote_round
         remote_params['auth'] = form.remote_auth
         remote_params['id'] = form.remote_id
 
 
-        print('init form accept D (children)')
         #children
         children_params = OrderedDict()
         the_conn['children'] = children_params
@@ -100,44 +99,44 @@ def connection_form():
         the_child_param['sha256_96'] = form.sha256_96
         the_child_param['local_ts'] = form.local_ts
         the_child_param['remote_ts'] = form.remote_ts
-        if bool(form.child_rekey_time and form.child_rekey_time.gettext().strip()):
+        if bool(form.child_rekey_time):
             the_child_param['rekey_time'] = form.child_rekey_time
-        if bool(form.child_lifetime and form.child_lifetime.gettext().strip()):
+        if bool(form.child_lifetime):
             the_child_param['lifetime'] = form.child_lifetime
         the_child_param['mode'] = form.child_mode
         the_child_param['policies'] = form.child_policies
         the_child_param['policies_fwd_out'] = form.child_policies_fwd_out
         the_child_param['dpd_action'] = form.dpd_action
         the_child_param['ipcomp'] = form.ipcomp
-        if bool(form.child_inactivity and form.child_inactivity.gettext().strip()):
+        if bool(form.child_inactivity):
             the_child_param['inactivity'] = form.child_inactivity
-        if bool(form.child_reqid and form.child_reqid.gettext().strip()):
+        if bool(form.child_reqid):
             the_child_param['reqid'] = form.child_reqid
-        if bool(form.child_priority and form.child_priority.gettext().strip()):
+        if bool(form.child_priority):
             the_child_param['priority'] = form.child_priority
-        if bool(form.child_interface and form.child_interface.gettext().strip()):
+        if bool(form.child_interface):
             the_child_param['interface'] = form.child_interface
-        if bool(form.mark_in and form.mark_in.gettext().strip()):
+        if bool(form.mark_in):
             the_child_param['mark_in'] = form.mark_in
-        if bool(form.mark_in_sa and form.mark_in_sa.gettext().strip()):
+        if bool(form.mark_in_sa):
             the_child_param['mark_in_sa'] = form.mark_in_sa
-        if bool(form.mark_out and form.mark_out.gettext().strip()):
+        if bool(form.mark_out):
             the_child_param['mark_out'] = form.mark_out
-        if bool(form.set_mark_in and form.set_mark_in.gettext().strip()):
+        if bool(form.set_mark_in):
             the_child_param['set_mark_in'] = form.set_mark_in
-        if bool(form.set_mark_out and form.set_mark_out.gettext().strip()):
+        if bool(form.set_mark_out):
             the_child_param['set_mark_out'] = form.set_mark_out
-        if bool(form.if_id_in and form.if_id_in.gettext().strip()):
+        if bool(form.if_id_in):
             the_child_param['if_id_in'] = form.if_id_in
-        if bool(form.if_id_out and form.if_id_out.gettext().strip()):
+        if bool(form.if_id_out):
             the_child_param['if_id_out'] = form.if_id_out
-        if bool(form.child_label and form.child_label.gettext().strip()):
+        if bool(form.child_label):
             the_child_param['label'] = form.child_label
-        if bool(form.label_mode and form.label_mode.gettext().strip()):
+        if bool(form.label_mode):
             the_child_param['label_mode'] = form.label_mode
-        if bool(form.tfc_padding and form.tfc_padding.gettext().strip()):
+        if bool(form.tfc_padding):
             the_child_param['tfc_padding'] = form.tfc_padding
-        if bool(form.replay_window and form.replay_window.gettext().strip()):
+        if bool(form.replay_window):
             the_child_param['replay_window'] = form.replay_window
         the_child_param['hw_offload'] = form.hw_offload
         the_child_param['copy_df'] = form.copy_df
