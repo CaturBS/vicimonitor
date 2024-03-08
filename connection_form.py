@@ -110,7 +110,7 @@ class ConnectionForm(FlaskForm):
     if_id_in = StringField('if_id_in', name="if_id_in", validators=[Optional()])
     if_id_out = StringField('if_id_out', name="if_id_out", validators=[Optional()])
     child_label = StringField('label', name="child_label", validators=[Optional()])
-    label_mode = SelectField(label='mark_in_sa', name='mark_in_sa', choices=["system", "selinux", " simple"])
+    label_mode = SelectField(label='label_mode', name='label_mode', choices=["system", "selinux", " simple"])
     tfc_padding = StringField('tfc_padding (default 0)', name="tfc_padding", validators=[Optional(), Regexp(r'^\d+$')])
     replay_window = StringField('replay_window (default 32)', name="replay_window", validators=[Optional(), Regexp(r'^\d+$')])
     hw_offload = SelectField(label='hw_offload', name='hw_offload', choices=["no", "yes"])
