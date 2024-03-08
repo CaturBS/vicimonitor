@@ -46,11 +46,11 @@ def connection_form():
         the_conn = OrderedDict()
         new_conn_params[form.name.data] = the_conn
         the_conn['version'] = form.version.data
-        the_conn['local_addrs'] = form.local_addrs.data
-        the_conn['remote_addrs'] = form.remote_addrs.data
+        the_conn['local_addrs'] = [form.local_addrs.data]
+        the_conn['remote_addrs'] = [form.remote_addrs.data]
         the_conn['local_port'] = form.local_port.data
         the_conn['remote_port'] = form.remote_port.data
-        the_conn['proposals'] = form.proposals.data
+        the_conn['proposals'] = [form.proposals.data]
         the_conn['vips'] = form.vips.data
         the_conn['aggressive'] = form.aggressive.data
         the_conn['pull'] = form.pull.data
@@ -95,10 +95,10 @@ def connection_form():
 
         the_child_param = OrderedDict()
         children_params[form.children_name.data] = the_child_param
-        the_child_param['esp_proposals'] = form.esp_proposals.data
+        the_child_param['esp_proposals'] = [form.esp_proposals.data]
         the_child_param['sha256_96'] = form.sha256_96.data
-        the_child_param['local_ts'] = form.local_ts.data
-        the_child_param['remote_ts'] = form.remote_ts.data
+        the_child_param['local_ts'] = [form.local_ts.data]
+        the_child_param['remote_ts'] = [form.remote_ts.data]
         if bool(form.child_rekey_time.data):
             the_child_param['rekey_time'] = form.child_rekey_time.data
         if bool(form.child_lifetime.data):
@@ -146,9 +146,9 @@ def connection_form():
         the_child_param['close_action'] = form.close_action.data
         sess = ViciSess.get_sesssion()
 
+        print(new_conn_params)
         print(sess)
         sess.load_conn(new_conn_params)
-        print(new_conn_params)
 
         conns_found = []
         for conn in sess.list_conns():
