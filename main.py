@@ -34,9 +34,17 @@ def index():
 def create_encyrpt_form(idx):
     form = ChooseEncryptionForm(str(idx))
     return render_template("choose_encryption.html", form=form)
+
+
+
 @app.route('/create_connection', methods = ['POST','GET'])
 def connection_form():
     form = ConnectionForm()
+
+    if not form.validate():
+        print(form.errors)
+        return render_template('index.html', conns=None, fail="vici_fail")
+
     if request.method == 'POST' and form.validate():
         print('init form accept A')
         new_conn_params = OrderedDict()
