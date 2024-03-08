@@ -38,6 +38,7 @@ def create_encyrpt_form(idx):
 def connection_form():
     form = ConnectionForm()
     if request.method == 'POST' and form.validate():
+        print('init form accept A')
         new_conn_params = OrderedDict()
         the_conn = OrderedDict()
         new_conn_params[form.name] = the_conn
@@ -66,6 +67,7 @@ def connection_form():
         if bool(form.rekey_time and form.rekey_time.strip()):
             the_conn['rekey_time'] = form.rekey_time
 
+        print('init form accept B (local)')
         #local
         local_params = OrderedDict()
         the_conn['local'] = local_params
@@ -75,6 +77,7 @@ def connection_form():
         local_params['auth'] = form.local_auth
         local_params['id'] = form.local_id
 
+        print('init form accept C (remote)')
         #remote
         remote_params = OrderedDict()
         the_conn['remote'] = remote_params
@@ -84,7 +87,8 @@ def connection_form():
         remote_params['id'] = form.remote_id
 
 
-        #remote
+        print('init form accept D (children)')
+        #children
         children_params = OrderedDict()
         the_conn['children'] = children_params
 
@@ -139,8 +143,12 @@ def connection_form():
         the_child_param['copy_dscp'] = form.copy_dscp
         the_child_param['start_action'] = form.start_action
         the_child_param['close_action'] = form.close_action
+        print('init form accept E (children)')
         sess = ViciSess.get_sesssion()
+
+        print(sess)
         sess.load_conn(new_conn_params)
+        print(new_conn_params)
 
         conns_found = []
         for conn in sess.list_conns():
