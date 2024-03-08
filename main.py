@@ -131,10 +131,10 @@ def connection_form():
             the_child_param['if_id_in'] = form.if_id_in.data
         if bool(form.if_id_out.data):
             the_child_param['if_id_out'] = form.if_id_out.data
-        if bool(form.child_label.data):
-            the_child_param['label'] = form.child_label.data
-        if bool(form.label_mode.data):
-            the_child_param['label_mode'] = form.label_mode.data
+        # if bool(form.child_label.data):
+        #     the_child_param['label'] = form.child_label.data
+        # if bool(form.label_mode.data):
+        #     the_child_param['label_mode'] = form.label_mode.data
         if bool(form.tfc_padding.data):
             the_child_param['tfc_padding'] = form.tfc_padding.data
         if bool(form.replay_window.data):
