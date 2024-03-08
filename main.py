@@ -148,20 +148,19 @@ def connection_form():
         the_child_param['copy_dscp'] = form.copy_dscp.data
         the_child_param['start_action'] = form.start_action.data
         the_child_param['close_action'] = form.close_action.data
+
+
         sess = ViciSess.get_sesssion()
-        sess.load_shared()
-        print(new_conn_params)
-        print(sess)
         sess.load_conn(new_conn_params)
 
         ike_loc = OrderedDict()
-        ike_loc['id'] = local_params['id']
-        ike_loc['type'] = 'PSK'
+        ike_loc['id-loc' + form.name.data] = local_params['id']
+        ike_loc['type'] = 'IKE'
         ike_loc['data'] = form.local_secret
         sess.load_shared(ike_loc)
         ike_remote = OrderedDict()
-        ike_remote['id'] = remote_params['id']
-        ike_loc['type'] = 'PSK'
+        ike_remote['id-rem' + form.name.data] = remote_params['id']
+        ike_loc['type'] = 'IKE'
         ike_remote['data'] = form.remote_secret
         sess.load_shared(ike_remote)
 
