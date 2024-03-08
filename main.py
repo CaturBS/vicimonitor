@@ -42,7 +42,6 @@ def connection_form():
     form = ConnectionForm()
 
     if request.method == 'POST' and form.validate():
-        print('init form accept A')
         new_conn_params = OrderedDict()
         the_conn = OrderedDict()
         new_conn_params[form.name] = the_conn
@@ -71,7 +70,6 @@ def connection_form():
         if bool(form.rekey_time and form.rekey_time.strip()):
             the_conn['rekey_time'] = form.rekey_time
 
-        print('init form accept B (local)')
         #local
         local_params = OrderedDict()
         the_conn['local'] = local_params
@@ -160,7 +158,9 @@ def connection_form():
         # return conns_found
         return render_template('index.html', conns=conns_found, fail="no")
 
-
+    elif request.method == 'POST':
+        print(form.errors)
+        return render_template("create_connection.html", form=form)
     else:
         return render_template("create_connection.html", form=form)
 
