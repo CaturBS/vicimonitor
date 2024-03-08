@@ -160,7 +160,7 @@ def connection_form():
         sess.load_shared(ike_loc)
         ike_remote = OrderedDict()
         ike_remote['id-rem' + form.name.data] = remote_params['id']
-        ike_loc['type'] = 'IKE'
+        ike_remote['type'] = 'IKE'
         ike_remote['data'] = form.remote_secret
         sess.load_shared(ike_remote)
 
